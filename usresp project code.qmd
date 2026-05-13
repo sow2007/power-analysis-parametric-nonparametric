@@ -1,0 +1,3697 @@
+---
+title: "usresp proj"
+format: html
+editor: visual
+---
+
+More resources on Quarto Markdown: <https://quarto.org>
+
+## Parametric and Nonparametric Statistical Test Analysis
+
+The purpose of this report is to analyze the power and effect sizes of the parametric analysis of variance (ANOVA) and nonparametric Kruskal-Wallis statistical test, as well as discuss the most appropriate use of each test accordingly in different scenarios.
+
+## Running Code
+
+The following charts compares the Type 1 error rates of the parametric ANOVA and nonparametric KW test under different scenarios.
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="default")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="skewed_true")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="hetero_true")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="hetero_skewed_true")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="highvarience_true")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="highvarience_skewed_true")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+The following charts compare the power of the parametric ANOVA and nonparametric KW test under different scenarios as well as exploring the β function of each scenario.
+
+Normal Conditions
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="reject001")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="reject01")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="reject02")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="reject03")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="reject05")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+Skewed
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="skewed_false001")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="skewed_false01")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="skewed_false02")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="skewed_false03")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="skewed_false05")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+Heteroskedasticity
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="hetero_false001")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="hetero_false01")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="hetero_false02")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="hetero_false03")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="hetero_false05")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+Heteroskedasticity, skewed
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="hetero_skewed_false001")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="hetero_skewed_false01")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="hetero_skewed_false02")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="hetero_skewed_false03")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="hetero_skewed_false05")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+High varience
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="highvarience_false001")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="highvarience_false01")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="highvarience_false02")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="highvarience03")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="highvarience_false05")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+High variance, skewed
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="highvarience_skewed_false001")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="highvarience_skewed_false01")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="highvarience_skewed_false02")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="highvarience_skewed_false03")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="highvarience_skewed_false05")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+Low *n*-sample (*n*\<30)
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="low_n_1_false")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="low_n_2_false")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| echo: false
+set.seed(1)
+conf <- config::get(config="low_n_3_false")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
+            max(max(anovaset1), max(kwset1))+0.01), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
