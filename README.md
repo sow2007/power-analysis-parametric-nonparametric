@@ -6,7 +6,12 @@ USRESP SUBMISSION 2026
 
 This is a power analysis simulator that compares the powers of both analysis of variance (ANOVA) and the Kruskal-Wallis _H_-test.
 
-Guide:
+
+##Guide
+scenarios: default, reject, skewed_, hetero_, hetero_skewed_ highvariance_, highvariance_skewed_, low_n_
+null hypothesis: true/false
+effect size: 0.01, 0.1, 0.2, 0.3, 0.5
+
 default: runs simulations where no assumptions are violated at effectsize=0
 reject: runs simulation where no assumptions are violated and where effect size is greater than zero
 skewed: normality assumption is violated (data is log-normal distributed)
