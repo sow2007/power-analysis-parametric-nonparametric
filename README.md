@@ -1,4 +1,4 @@
-# robust-power-analysis-of-parametric-anova-and-nonparametric-kw
+# Robustness analysis and power analysis of parametric one-way analysis of variance (ANOVA) and one-way Kruskal-Wallis test
 
 ---
 USRESP SUBMISSION 2026
