@@ -1,4 +1,4 @@
-# parametric-anova-and-nonparametric-kw-analysis
+# robust-power-analysis-of-parametric-anova-and-nonparametric-kw
 
 ---
 USRESP SUBMISSION 2026
