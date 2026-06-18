@@ -1,10 +1,10 @@
 # parametric-anova-and-nonparametric-kw-analysis
 
 ---
-USRESP SUBMISSION 2026 [WIP]
+USRESP SUBMISSION 2026
 ---
 
-By comparing and contrasting parametric analysis of variance (ANOVA) and nonparametric Kruskal-Wallis (KW) statistical tests, we can appropriately determine which category of statistical test to use under different scenarios.
+This is a power analysis simulator that compares the powers of both analysis of variance (ANOVA) and the Kruskal-Wallis _H_-test.
 
 Guide:
 default: runs simulations where no assumptions are violated at effectsize=0
