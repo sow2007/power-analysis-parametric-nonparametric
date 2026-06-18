@@ -1,10 +1,8 @@
 ---
-title: "usresp proj"
+title: "usresp proj code new"
 format: html
 editor: visual
 ---
-
-More resources on Quarto Markdown: <https://quarto.org>
 
 ## Parametric and Nonparametric Statistical Test Analysis
 
@@ -12,10 +10,12 @@ The purpose of this report is to analyze the power and effect sizes of the param
 
 ## Running Code
 
-The following charts compares the Type 1 error rates of the parametric ANOVA and nonparametric KW test under different scenarios.
+The following charts compares the Type 1 error rates of the parametric ANOVA and nonparametric KW test under different scenarios for effect size β=0.
 
 ```{r}
+#| label: default
 #| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="default")
 
@@ -82,11 +82,14 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+print("Simulations are finished!")
+print(anovaset1)
+print(kwset1)
+
 # -- Plot --
 
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -102,13 +105,15 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
 ```
 
 ```{r}
+#| label: skewed_true
 #| echo: false
 set.seed(1)
 conf <- config::get(config="skewed_true")
@@ -176,11 +181,14 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+print("Simulations are finished!")
+print(anovaset1)
+print(kwset1)
+
 # -- Plot --
 
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -196,13 +204,15 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
 ```
 
 ```{r}
+#| label: hetero_true
 #| echo: false
 set.seed(1)
 conf <- config::get(config="hetero_true")
@@ -270,11 +280,14 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+print("Simulations are finished!")
+print(anovaset1)
+print(kwset1)
+
 # -- Plot --
 
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -290,13 +303,15 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
 ```
 
 ```{r}
+#| label: hetero_skewed_true
 #| echo: false
 set.seed(1)
 conf <- config::get(config="hetero_skewed_true")
@@ -364,11 +379,14 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+print("Simulations are finished!")
+print(anovaset1)
+print(kwset1)
+
 # -- Plot --
 
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -384,16 +402,18 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
 ```
 
 ```{r}
+#| label: highvariance_true
 #| echo: false
 set.seed(1)
-conf <- config::get(config="highvarience_true")
+conf <- config::get(config="highvariance_true")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
@@ -458,11 +478,14 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+print("Simulations are finished!")
+print(anovaset1)
+print(kwset1)
+
 # -- Plot --
 
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -478,16 +501,18 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
 ```
 
 ```{r}
+#| label: highvariance_skewed_true
 #| echo: false
 set.seed(1)
-conf <- config::get(config="highvarience_skewed_true")
+conf <- config::get(config="highvariance_skewed_true")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
@@ -552,11 +577,14 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+print("Simulations are finished!")
+print(anovaset1)
+print(kwset1)
+
 # -- Plot --
 
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -572,18 +600,417 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
 ```
 
-The following charts compare the power of the parametric ANOVA and nonparametric KW test under different scenarios as well as exploring the β function of each scenario.
+```{r}
+#| label: low_n_1_true
+#| echo: false
+set.seed(1)
+conf <- config::get(config="low_n_1_true")
 
-Normal Conditions
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+print("Simulations are finished!")
+print(anovaset1)
+print(kwset1)
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(0, 1), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
 
 ```{r}
+#| label: low_n_2_true
 #| echo: false
+set.seed(1)
+conf <- config::get(config="low_n_2_true")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+print("Simulations are finished!")
+print(anovaset1)
+print(kwset1)
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(0, 1), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| label: low_n_3_true
+#| echo: false
+set.seed(1)
+conf <- config::get(config="low_n_3_true")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+print("Simulations are finished!")
+print(anovaset1)
+print(kwset1)
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(0, 1), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+```{r}
+#| label: low_n_4_true
+#| echo: false
+set.seed(1)
+conf <- config::get(config="low_n_4_true")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    groups <- factor(rep(1:conf$groups, each = conf$sample))
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+print("Simulations are finished!")
+print(anovaset1)
+print(kwset1)
+
+# -- Plot --
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(0, 1), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+```
+
+The following charts compare the power of the parametric ANOVA and nonparametric KW test under different scenarios as well as exploring effect size β.
+
+Normal, Reject
+
+```{r}
+#| label: reject001
+#| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="reject001")
 
@@ -650,11 +1077,14 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+print("Simulations are finished!")
+print(anovaset1)
+print(kwset1)
+
 # -- Plot --
 
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -670,20 +1100,25 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
 ```
 
 ```{r}
+#| label: reject01
 #| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="reject01")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -705,7 +1140,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -744,11 +1178,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -764,20 +1200,26 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
 ```{r}
+#| label: reject02
 #| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="reject02")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -799,7 +1241,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -838,11 +1279,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -858,20 +1301,25 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
 ```
 
 ```{r}
+#| label: reject03
 #| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="reject03")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -893,7 +1341,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -932,11 +1379,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -952,20 +1401,26 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
 ```{r}
+#| label: reject05
 #| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="reject05")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -987,7 +1442,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -1026,11 +1480,11 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -1046,22 +1500,28 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
 Skewed
 
 ```{r}
+#| label: skewed_false001
 #| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="skewed_false001")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -1083,7 +1543,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -1122,11 +1581,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -1142,20 +1603,26 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
 ```{r}
+#| label: skewed_false01
 #| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="skewed_false01")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -1177,7 +1644,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -1216,11 +1682,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -1236,20 +1704,25 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
 ```
 
 ```{r}
+#| label: skewed_false02
 #| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="skewed_false02")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -1271,7 +1744,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -1310,11 +1782,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -1330,20 +1804,26 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
 ```{r}
+#| label: skewed_false03
 #| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="skewed_false03")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -1365,7 +1845,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -1404,11 +1883,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -1424,20 +1905,26 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
 ```{r}
+#| label: skewed_false05
 #| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="skewed_false05")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -1459,7 +1946,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -1498,11 +1984,11 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -1518,22 +2004,28 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
-Heteroskedasticity
+Heteroskedastic
 
 ```{r}
+#| label: hetero_false001
 #| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="hetero_false001")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -1555,7 +2047,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -1594,11 +2085,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -1614,20 +2107,26 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
 ```{r}
+#| label: hetero_false01
 #| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="hetero_false01")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -1649,7 +2148,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -1688,11 +2186,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -1708,20 +2208,26 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
 ```{r}
+#| label: hetero_false02
 #| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="hetero_false02")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -1743,7 +2249,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -1782,11 +2287,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -1802,20 +2309,26 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
 ```{r}
+#| label: hetero_false03
 #| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="hetero_false03")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -1837,7 +2350,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -1876,11 +2388,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -1896,20 +2410,26 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
 ```{r}
+#| label: hetero_false05
 #| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="hetero_false05")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -1931,7 +2451,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -1970,11 +2489,11 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -1990,22 +2509,28 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
-Heteroskedasticity, skewed
+Heteroskedastic, skewed
 
 ```{r}
+#| label: hetero_skewed_false001
 #| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="hetero_skewed_false001")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -2027,7 +2552,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -2066,11 +2590,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -2086,20 +2612,26 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
 ```{r}
+#| label: hetero_skewed_false01
 #| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="hetero_skewed_false01")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -2121,7 +2653,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -2160,11 +2691,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -2180,20 +2713,26 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
 ```{r}
+#| label: hetero_skewed_false02
 #| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="hetero_skewed_false02")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -2215,7 +2754,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -2254,11 +2792,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -2274,20 +2814,26 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
 ```{r}
+#| label: hetero_skewed_false03
 #| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="hetero_skewed_false03")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -2309,7 +2855,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -2348,11 +2893,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -2368,20 +2915,25 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
 ```
 
 ```{r}
+#| label: hetero_skewed_false05
 #| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="hetero_skewed_false05")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -2403,7 +2955,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -2442,11 +2993,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -2462,22 +3015,28 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
-High varience
+High Variance
 
 ```{r}
+#| label: highvariance_false001
 #| echo: false
+ 
 set.seed(1)
-conf <- config::get(config="highvarience_false001")
+conf <- config::get(config="highvariance_false001")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -2499,7 +3058,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -2538,11 +3096,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -2558,20 +3118,26 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
 ```{r}
+#| label: highvariance_false01
 #| echo: false
+ 
 set.seed(1)
-conf <- config::get(config="highvarience_false01")
+conf <- config::get(config="highvariance_false01")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -2593,7 +3159,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -2632,11 +3197,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -2652,20 +3219,26 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
 ```{r}
+#| label: highvariance_false02
 #| echo: false
+ 
 set.seed(1)
-conf <- config::get(config="highvarience_false02")
+conf <- config::get(config="highvariance_false02")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -2687,7 +3260,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -2726,11 +3298,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -2746,20 +3320,26 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
 ```{r}
+#| label: highvariance_false03
 #| echo: false
+ 
 set.seed(1)
-conf <- config::get(config="highvarience03")
+conf <- config::get(config="highvariance_false03")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -2781,7 +3361,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -2820,11 +3399,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -2840,20 +3421,26 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
 ```{r}
+#| label: highvariance_false05
 #| echo: false
+ 
 set.seed(1)
-conf <- config::get(config="highvarience_false05")
+conf <- config::get(config="highvariance_false05")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -2875,7 +3462,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -2914,11 +3500,11 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -2934,22 +3520,29 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
+
 ```
 
-High variance, skewed
+High Variance, Skewed
 
 ```{r}
+#| label: highvariance_skewed_false001
 #| echo: false
+ 
 set.seed(1)
-conf <- config::get(config="highvarience_skewed_false001")
+conf <- config::get(config="highvariance_skewed_false001")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -2971,7 +3564,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -3010,11 +3602,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -3030,20 +3624,26 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
 ```{r}
+#| label: highvariance_skewed_false01
 #| echo: false
+ 
 set.seed(1)
-conf <- config::get(config="highvarience_skewed_false01")
+conf <- config::get(config="highvariance_skewed_false01")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -3065,7 +3665,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -3104,11 +3703,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -3124,20 +3725,26 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
 ```{r}
+#| label: highvariance_skewed_false02
 #| echo: false
+ 
 set.seed(1)
-conf <- config::get(config="highvarience_skewed_false02")
+conf <- config::get(config="highvariance_skewed_false02")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -3159,7 +3766,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -3198,11 +3804,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -3218,20 +3826,26 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
 ```{r}
+#| label: highvariance_skewed_false03
 #| echo: false
+ 
 set.seed(1)
-conf <- config::get(config="highvarience_skewed_false03")
+conf <- config::get(config="highvariance_skewed_false03")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -3253,7 +3867,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -3292,11 +3905,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -3312,20 +3927,26 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
 ```{r}
+#| label: highvariance_skewed_false05
 #| echo: false
+ 
 set.seed(1)
-conf <- config::get(config="highvarience_skewed_false05")
+conf <- config::get(config="highvariance_skewed_false05")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -3347,7 +3968,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -3386,11 +4006,11 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -3406,22 +4026,28 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
-Low *n*-sample (*n*\<30)
+n\<30 (Central Limit Theorem Threshold Violated)
 
 ```{r}
+#| label: low_n_1_false
 #| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="low_n_1_false")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -3443,7 +4069,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -3482,11 +4107,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -3502,20 +4129,26 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
 ```{r}
+#| label: low_n_2_false
 #| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="low_n_2_false")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -3537,7 +4170,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -3576,11 +4208,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -3596,20 +4230,26 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
 ```
 
 ```{r}
+#| label: low_n_3_false
 #| echo: false
+ 
 set.seed(1)
 conf <- config::get(config="low_n_3_false")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
 for (w in seq_len(conf$iterations)){
   
   
@@ -3631,7 +4271,6 @@ for (w in seq_len(conf$iterations)){
     
     
     raw <- unlist(data)
-    groups <- factor(rep(1:conf$groups, each = conf$sample))
     
     df <- data.frame(
       values = raw,
@@ -3670,11 +4309,13 @@ for (w in seq_len(conf$iterations)){
   kwset1[w] <- kw_reject_proportion
 }
 
+
 # -- Plot --
 
+t_statistic <-t.test(anovaset1, kwset1)
+
 plot(density(anovaset1),col=rgb(0,0,1), 
-     xlim=c(min(min(anovaset1), min(kwset1))-0.01, 
-            max(max(anovaset1), max(kwset1))+0.01), 
+     xlim=c(0, 1), 
      ylim=c(0,conf$iterations),
      
      xlab=
@@ -3690,8 +4331,111 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis"),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
   pch= c(16,16)
 )
+
+```
+
+```{r}
+#| label: low_n_4_false
+#| echo: false
+ 
+set.seed(1)
+conf <- config::get(config="low_n_4_false")
+
+anovaset1 <- numeric(conf$iterations)
+kwset1 <- numeric(conf$iterations)
+
+groups <- factor(rep(1:conf$groups, each = conf$sample))
+
+for (w in seq_len(conf$iterations)){
+  
+  
+  anovaset2 <- numeric(conf$simulations)
+  kwset2 <- numeric(conf$simulations)
+  
+  for (c in seq_len(conf$simulations)){
+    
+    
+    #control group negative
+    data <- lapply(seq_len(conf$groups), function(u){
+      if (conf$condition=="normal"){
+        rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      } else if (conf$condition=="skewed") {
+        rlnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
+      }
+    }
+    )
+    
+    
+    raw <- unlist(data)
+    
+    df <- data.frame(
+      values = raw,
+      group = groups
+    )
+    
+    #tests
+    
+    
+    results <- oneway.test(
+      values ~ group,
+      df,
+      var.equal=TRUE
+    )
+    pVal <- results$p.value
+    
+    anovaset2[c] <- pVal
+    
+    results_kw <- kruskal.test(
+      values ~ group,
+      data = df,
+    )
+    
+    pVal_kw <- results_kw$p.value
+    
+    kwset2[c] <- pVal_kw
+    
+    
+    
+  }
+  
+  anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
+  kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
+  
+  anovaset1[w] <- anova_reject_proportion
+  kwset1[w] <- kw_reject_proportion
+}
+
+
+# -- Plot --
+
+t_statistic <-t.test(anovaset1, kwset1)
+
+plot(density(anovaset1),col=rgb(0,0,1), 
+     xlim=c(0, 1), 
+     ylim=c(0,conf$iterations),
+     
+     xlab=
+       if (conf$reject=="No"){
+         "Proportion of Type I Error"
+       } else {
+         "Power of the test"
+       },
+     ylab="Density",
+     main=conf$title
+     )
+
+lines(density(kwset1), col=rgb(1,0,0,))
+legend(
+  "topleft",
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
+  col= c("blue", "red"),
+  pch= c(16,16)
+)
+
 ```

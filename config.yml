@@ -4,7 +4,7 @@
 default:
   condition: "normal"
   reject: "No"
-  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, Simulation 1" 
+  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, δ=0" 
   groups: 3
   simulations: 1000
   iterations: 100
@@ -15,7 +15,7 @@ default:
 reject001:
   condition: "normal"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 2"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, δ=0.01"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -26,7 +26,7 @@ reject001:
 reject01:
   condition: "normal"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 2"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, δ=0.1"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -37,7 +37,7 @@ reject01:
 reject02:
   condition: "normal"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 2"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, δ=0.2"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -48,7 +48,7 @@ reject02:
 reject03:
   condition: "normal"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 2"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, δ=0.3"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -59,7 +59,7 @@ reject03:
 reject05:
   condition: "normal"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 2"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, δ=0.5"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -71,7 +71,7 @@ reject05:
 skewed_true:
   condition: "skewed"
   reject: "No"
-  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, Simulation 3"
+  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, Skewed, δ=0"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -82,7 +82,7 @@ skewed_true:
 skewed_false001:
   condition: "skewed"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 4"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Skewed, δ=0.01"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -93,7 +93,7 @@ skewed_false001:
 skewed_false01:
   condition: "skewed"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 4"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Skewed, δ=0.1"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -104,7 +104,7 @@ skewed_false01:
 skewed_false02:
   condition: "skewed"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 4"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Skewed, δ=0.2"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -115,7 +115,7 @@ skewed_false02:
 skewed_false03:
   condition: "skewed"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 4"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Skewed, δ=0.3"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -126,7 +126,7 @@ skewed_false03:
 skewed_false05:
   condition: "skewed"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 4"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Skewed, δ=0.5"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -138,7 +138,7 @@ skewed_false05:
 hetero_true:
   condition: "normal"
   reject: "No"
-  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, Simulation 5"
+  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, Heteroskedastic, δ=0"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -149,7 +149,7 @@ hetero_true:
 hetero_false001:
   condition: "normal"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 6"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Heteroskedastic, δ=0.01"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -160,7 +160,7 @@ hetero_false001:
 hetero_false01:
   condition: "normal"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 6"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Heteroskedastic, δ=0.1"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -171,7 +171,7 @@ hetero_false01:
 hetero_false02:
   condition: "normal"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 6"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Heteroskedastic, δ=0.2"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -182,7 +182,7 @@ hetero_false02:
 hetero_false03:
   condition: "normal"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 6"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Heteroskedastic, δ=0.3"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -193,7 +193,7 @@ hetero_false03:
 hetero_false05:
   condition: "normal"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 6"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Heteroskedastic, δ=0.5"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -205,7 +205,7 @@ hetero_false05:
 hetero_skewed_true:
   condition: "skewed"
   reject: "No"
-  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, Simulation 7"
+  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, Heteroskedastic, Skewed, δ=0"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -216,7 +216,7 @@ hetero_skewed_true:
 hetero_skewed_false001:
   condition: "skewed"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 8"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Heteroskedastic, Skewed, δ=0.01"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -227,7 +227,7 @@ hetero_skewed_false001:
 hetero_skewed_false01:
   condition: "skewed"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 8"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Heteroskedastic, Skewed, δ=0.1"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -238,7 +238,7 @@ hetero_skewed_false01:
 hetero_skewed_false02:
   condition: "skewed"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 8"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Heteroskedastic, Skewed, δ=0.2"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -249,7 +249,7 @@ hetero_skewed_false02:
 hetero_skewed_false03:
   condition: "skewed"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 8"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Heteroskedastic, Skewed, δ=0.3"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -260,7 +260,7 @@ hetero_skewed_false03:
 hetero_skewed_false05:
   condition: "skewed"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 8"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Heteroskedastic, Skewed, δ=0.5"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -269,10 +269,10 @@ hetero_skewed_false05:
   sd: [1,3,5]
 
   
-highvarience_true:
+highvariance_true:
   condition: "normal"
   reject: "No"
-  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, Simulation 9"
+  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, High Variance, δ=0"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -280,10 +280,10 @@ highvarience_true:
   miu: [0,0,0]
   sd: [5,5,5]
   
-highvarience_false001:
+highvariance_false001:
   condition: "normal"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 10"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, High Variance, δ=0.01"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -291,10 +291,10 @@ highvarience_false001:
   miu: [0,0.01,0.02]
   sd: [5,5,5]
 
-highvarience_false01:
+highvariance_false01:
   condition: "normal"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 10"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, High Variance, δ=0.1"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -302,10 +302,10 @@ highvarience_false01:
   miu: [0,0.1,0.2]
   sd: [5,5,5]
 
-highvarience_false02:
+highvariance_false02:
   condition: "normal"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 10"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, High Variance, δ=0.2"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -313,10 +313,10 @@ highvarience_false02:
   miu: [0,0.2,0.4]
   sd: [5,5,5]
   
-highvarience_false03:
+highvariance_false03:
   condition: "normal"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 10"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, High Variance, δ=0.3"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -324,10 +324,10 @@ highvarience_false03:
   miu: [0,0.3,0.6]
   sd: [5,5,5]
 
-highvarience_false05:
+highvariance_false05:
   condition: "normal"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 10"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, High Variance, δ=0.5"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -336,10 +336,10 @@ highvarience_false05:
   sd: [5,5,5]
   
 
-highvarience_skewed_true:
+highvariance_skewed_true:
   condition: "skewed"
   reject: "No"
-  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, Simulation 11"
+  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, High Variance, Skewed, δ=0"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -347,10 +347,10 @@ highvarience_skewed_true:
   miu: [0,0,0]
   sd: [5,5,5]
   
-highvarience_skewed_false001:
+highvariance_skewed_false001:
   condition: "skewed"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 12"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, High Variance, Skewed, δ=0.01"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -358,10 +358,10 @@ highvarience_skewed_false001:
   miu: [0,0.01,0.02]
   sd: [5,5,5]
 
-highvarience_skewed_false01:
+highvariance_skewed_false01:
   condition: "skewed"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 12"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, High Variance, Skewed, δ=0.1"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -369,10 +369,10 @@ highvarience_skewed_false01:
   miu: [0,0.1,0.2]
   sd: [5,5,5]
 
-highvarience_skewed_false02:
+highvariance_skewed_false02:
   condition: "skewed"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 12"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, High Variance, Skewed, δ=0.2"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -380,10 +380,10 @@ highvarience_skewed_false02:
   miu: [0,0.2,0.4]
   sd: [5,5,5]
 
-highvarience_skewed_false03:
+highvariance_skewed_false03:
   condition: "skewed"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 12"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, High Variance, Skewed, δ=0.3"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -391,10 +391,10 @@ highvarience_skewed_false03:
   miu: [0,0.3,0.6]
   sd: [5,5,5]
 
-highvarience_skewed_false05:
+highvariance_skewed_false05:
   condition: "skewed"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, Simulation 12"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, High Variance, Skewed, δ=0.5"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -406,7 +406,7 @@ highvarience_skewed_false05:
 low_n_1_true:
   condition: "normal"
   reject: "No"
-  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, Simulation 13"
+  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, n=25, δ=0"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -417,7 +417,7 @@ low_n_1_true:
 low_n_1_false:
   condition: "normal"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, Simulation 14"
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, n=25, δ=0.3"
   groups: 3
   simulations: 1000
   iterations: 100
@@ -428,7 +428,7 @@ low_n_1_false:
 low_n_2_true:
   condition: "normal"
   reject: "No"
-  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, Simulation 15" 
+  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, n=10, δ=0" 
   groups: 3
   simulations: 1000
   iterations: 100
@@ -439,18 +439,18 @@ low_n_2_true:
 low_n_2_false:
   condition: "normal"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, Simulation 16" 
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, n=10, δ=0.3" 
   groups: 3
   simulations: 1000
   iterations: 100
   sample: 10
-  miu: [0,0,0]
+  miu: [0,0.3,0.6]
   sd: [1,1,1]
   
 low_n_3_true:
   condition: "normal"
   reject: "No"
-  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, Simulation 17" 
+  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, n=5, δ=0" 
   groups: 3
   simulations: 1000
   iterations: 100
@@ -461,18 +461,18 @@ low_n_3_true:
 low_n_3_false:
   condition: "normal"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, Simulation 18" 
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, n=5, δ=0.3" 
   groups: 3
   simulations: 1000
   iterations: 100
   sample: 5
-  miu: [0,0,0]
+  miu: [0,0.3,0.6]
   sd: [1,1,1]
   
 low_n_4_true:
   condition: "normal"
   reject: "No"
-  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, Simulation 19" 
+  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, n=2, δ=0" 
   groups: 3
   simulations: 1000
   iterations: 100
@@ -483,10 +483,10 @@ low_n_4_true:
 low_n_4_false:
   condition: "normal"
   reject: "Yes"
-  title: "ANOVA and Kruskal-Wallis Distribution of Type I Errors, Simulation 20" 
+  title: "ANOVA and Kruskal-Wallis Power of the Test Distribution, n=2, δ=0.3" 
   groups: 3
   simulations: 1000
   iterations: 100
   sample: 2
-  miu: [0,0,0]
+  miu: [0,0.3,0.6]
   sd: [1,1,1]

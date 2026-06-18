@@ -21,13 +21,14 @@
 
 #you can configure these settings in config.yml !
 
-
+#generates seed, grabs config, and creates empty vectors anovaset1 and kwset1
 set.seed(1)
-conf <- config::get(config="highvariance_false05")
+conf <- config::get(config="default")
 
 anovaset1 <- numeric(conf$iterations)
 kwset1 <- numeric(conf$iterations)
 
+#generates empty vectors anovaset2 and kwset2
 for (w in seq_len(conf$iterations)){
   
   
@@ -36,8 +37,7 @@ for (w in seq_len(conf$iterations)){
   
   for (c in seq_len(conf$simulations)){
     
-    
-    #control group negative
+    #generates random data based on specified parameters
     data <- lapply(seq_len(conf$groups), function(u){
       if (conf$condition=="normal"){
         rnorm(conf$sample, unlist(conf$miu[u]), unlist(conf$sd[u]))
@@ -47,7 +47,7 @@ for (w in seq_len(conf$iterations)){
     }
     )
     
-    
+    #cleans data
     raw <- unlist(data)
     groups <- factor(rep(1:conf$groups, each = conf$sample))
     
@@ -56,34 +56,29 @@ for (w in seq_len(conf$iterations)){
       group = groups
     )
     
-    #tests
-    
-    
+    #extracts p-value and stores it to anovaset2 and kwset2 respectively
     results <- oneway.test(
       values ~ group,
       df,
       var.equal=TRUE
     )
     pVal <- results$p.value
-    
     anovaset2[c] <- pVal
     
     results_kw <- kruskal.test(
       values ~ group,
       data = df,
     )
-    
     pVal_kw <- results_kw$p.value
-    
     kwset2[c] <- pVal_kw
-    
-    
     
   }
   
+  #calculates proportion that were rejected from each test respectively
   anova_reject_proportion <- (sum(anovaset2<0.05))/conf$simulations
   kw_reject_proportion <- (sum(kwset2<0.05))/conf$simulations
   
+  #stores each proportion into anovaset1 and kwset1 respectively
   anovaset1[w] <- anova_reject_proportion
   kwset1[w] <- kw_reject_proportion
 }
@@ -111,9 +106,10 @@ plot(density(anovaset1),col=rgb(0,0,1),
 lines(density(kwset1), col=rgb(1,0,0,))
 legend(
   "topleft",
-  legend= c("ANOVA", "Kruskal-Wallis",t_statistic$estimate, t_statistic$statistic, t_statistic$p.value),
+  legend= c("ANOVA", 
+            "Kruskal-Wallis"),
   col= c("blue", "red"),
-  pch= c(16,16,1 , 1, NA_integer_, NA_integer_)
+  pch= c(16,16)
 )
 
 
